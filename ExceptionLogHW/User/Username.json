@@ -1,0 +1,9 @@
+{
+  "MinLength": 4,
+  "MaxLength": 30,
+  "Letters": 1,
+  "Numbers": 0,
+  "Specials": -1,
+  "Spaces": -1
+
+}
