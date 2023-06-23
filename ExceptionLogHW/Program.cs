@@ -78,12 +78,12 @@ namespace ExceptionLogHW {
                     Menus.DisplayMenu("Login menu");
                     Console.Write("Username: ");
                     if (username == null) {
-                        retry--;
                         string get = GetCredentials(true);
                         if (!users.ContainsUsername(get)) throw new AccountNotExistException();
+
                         username = get;
-                        retry = retryMax;
                         Menus.ClearScreen();
+                        retry = retryMax;
                         continue;
                     }
                     else Console.Write(username + "\n");
@@ -91,26 +91,31 @@ namespace ExceptionLogHW {
                     Console.Write("Password: ");
                     if (password == null) {
                         string? get = GetCredentials(false);
-                        if (!users.Login(username, get)) {
-                            retry--;
-                            throw new PasswordNotMatchException();
-                        }
-                        Console.WriteLine("Login successfully!");
-                        user = username;
-                        return true;
+                        if (!users.Login(username, get)) throw new PasswordNotMatchException();
+
+                        password = get;
+                        Menus.ClearScreen();
+                        retry = retryMax;
+                        continue;
                     }
+                    else Console.Write(password + "\n");
+
                     Menus.ClearScreen();
+                    Console.WriteLine("Login successfully!");
+                    user = username;
+                    return true;
                 }
                 catch (CustomException e) {
+                    retry--;
                     Menus.ClearScreen();
                     log.Error(e.Message, e);
+
                     var color = Console.ForegroundColor;
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine(e.Message);
                     Console.ForegroundColor = color;
                 }
                 catch (Exception e) {
-                    Menus.ClearScreen();
                     Console.WriteLine(e);
                 }
             }
@@ -144,6 +149,7 @@ namespace ExceptionLogHW {
                 catch (CustomException e) {
                     Menus.ClearScreen();
                     log.Error(e.Message,e);
+
                     var color = Console.ForegroundColor;
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine(e.Message);

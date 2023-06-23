@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +7,8 @@ using System.Threading.Tasks;
 
 namespace ExceptionLogHW.User {
     public class Users {
+        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         static int count = 1;
         private int userId;
         private string? username;
@@ -14,8 +17,17 @@ namespace ExceptionLogHW.User {
         public int UserId {
             get { return userId; }
             set {
-                if (UserManager.Instance.ContainsID(value)) throw new Exception("Contains id");
-                userId = value;
+                int i = 0;
+                while (true) {
+                    try {
+                        if (UserManager.Instance.ContainsID(value)) throw new Exception("Contains id");
+                        userId = value + i++;
+                        break;
+                    }
+                    catch(Exception e) {
+                        log.Fatal(e.Message, e);
+                    }
+                }
             }
         }
 
