@@ -1,14 +1,12 @@
-﻿using log4net;
+﻿using BusinessLayer.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExceptionLogHW.User {
+namespace BusinessLayer.Models {
     public class Users {
-        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
         static int count = 1;
         private int userId;
         private string? username;
@@ -19,14 +17,9 @@ namespace ExceptionLogHW.User {
             set {
                 int i = 0;
                 while (true) {
-                    try {
-                        if (UserManager.Instance.ContainsID(value)) throw new Exception("Contains id");
-                        userId = value + i++;
-                        break;
-                    }
-                    catch(Exception e) {
-                        log.Fatal(e.Message, e);
-                    }
+                    if (UserRepository.Instance.ContainsID(value)) continue;
+                    userId = value + i++;
+                    break;
                 }
             }
         }
@@ -36,7 +29,7 @@ namespace ExceptionLogHW.User {
             get { return username; }
             set {
                 if (value == null) throw new Exception("Null username");
-                if (UserManager.Instance.ContainsUsername(value)) throw new Exception("Contains username");
+                if (UserRepository.Instance.ContainsUsername(value)) throw new Exception("Contains username");
                 username = value;
             }
         }
@@ -52,7 +45,7 @@ namespace ExceptionLogHW.User {
         public Users() { }
 
         public Users(string _username, string _password) {
-            int id = UserId = UserManager.Instance.Count - 1;
+            int id = UserId = UserRepository.Instance.Count - 1;
             while (true) {
                 try {
                     UserId = id++;

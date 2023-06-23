@@ -258,6 +258,19 @@
             "rid": "win"
           }
         }
+      },
+      "BusinessLayer/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.3"
+        },
+        "compile": {
+          "bin/placeholder/BusinessLayer.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/BusinessLayer.dll": {}
+        }
       }
     }
   },
@@ -740,10 +753,16 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
+    },
+    "BusinessLayer/1.0.0": {
+      "type": "project",
+      "path": "../BusinessLayer/BusinessLayer.csproj",
+      "msbuildProject": "../BusinessLayer/BusinessLayer.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net6.0": [
+      "BusinessLayer >= 1.0.0",
       "Microsoft.Extensions.Logging >= 7.0.0",
       "Newtonsoft.Json >= 13.0.3",
       "log4net >= 2.0.15"
@@ -756,9 +775,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\FA\\NET\\ExceptionLogHW\\ExceptionLogHW\\ExceptionLogHW.csproj",
-      "projectName": "ExceptionLogHW",
-      "projectPath": "D:\\FA\\NET\\ExceptionLogHW\\ExceptionLogHW\\ExceptionLogHW.csproj",
+      "projectUniqueName": "D:\\FA\\NET\\ExceptionLogHW\\ExceptionLogHW\\PresentationLayer.csproj",
+      "projectName": "PresentationLayer",
+      "projectPath": "D:\\FA\\NET\\ExceptionLogHW\\ExceptionLogHW\\PresentationLayer.csproj",
       "packagesPath": "C:\\Users\\iamap\\.nuget\\packages\\",
       "outputPath": "D:\\FA\\NET\\ExceptionLogHW\\ExceptionLogHW\\obj\\",
       "projectStyle": "PackageReference",
@@ -780,7 +799,11 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\FA\\NET\\ExceptionLogHW\\BusinessLayer\\BusinessLayer.csproj": {
+              "projectPath": "D:\\FA\\NET\\ExceptionLogHW\\BusinessLayer\\BusinessLayer.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

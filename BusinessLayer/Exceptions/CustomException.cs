@@ -5,7 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExceptionLogHW {
+namespace BusinessLayer.Exceptions {
+    /// <summary>
+    /// Sử dụng enum để tag lỗi gặp phải khi tạo và đăng nhập 
+    /// </summary>
     public enum ErrorType {
         UsernameEmpty,
         PasswordEmpty,
@@ -22,19 +25,39 @@ namespace ExceptionLogHW {
         TooShort,
         UsernameExisted,
     }
-    public class CustomException : Exception {
+
+    /// <summary>
+    /// Lớp cha của các Exceptions tự tạo
+    /// </summary>
+    public abstract class CustomException : Exception {
     }
+
+    /// <summary>
+    /// Exception thrown khi tên đăng nhập không được tìm thấy
+    /// </summary>
     public class AccountNotExistException : CustomException {
         public override string Message => "Account is not available";
     }
+
+    /// <summary>
+    /// Exception thrown khi tên đăng nhập và mật khẩu không trùng khớp
+    /// </summary>
     public class PasswordNotMatchException : CustomException {
         public override string Message => "Your password do not match";
     }
+
+    /// <summary>
+    /// Exception thrown khi tên đăng nhập và mật khẩu không theo định dạng yêu cầu
+    /// </summary>
     public class AccountNotEnteredException : CustomException {
         ErrorType[] errors;
         public AccountNotEnteredException(params ErrorType[] e) {
             errors = e;
         }
+
+        /// <summary>
+        /// Thông báo lỗi. Hiển thị dưới dạng error message nếu chỉ có 1 error, và dưới dạng liệt kê lỗi nếu có từ 2 errors trở lên
+        /// </summary>
         public override string Message {
             get {
                 if (errors.Length == 1) return ToErrorMessage(errors[0]);
@@ -42,6 +65,12 @@ namespace ExceptionLogHW {
             }
         }
 
+        /// <summary>
+        /// Nhận enum ErrorType và trả ra 1 error mesage tương ứng
+        /// </summary>
+        /// <param name="errorType">Enum error type nhận được</param>
+        /// <returns>Error message</returns>
+        /// <exception cref="NotImplementedException"></exception>
         private static string ToErrorMessage(ErrorType errorType) {
             string message;
             switch (errorType) {

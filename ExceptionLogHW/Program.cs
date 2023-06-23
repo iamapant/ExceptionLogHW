@@ -1,5 +1,8 @@
-﻿using ExceptionLogHW.User;
+﻿using BusinessLayer.Exceptions;
+using BusinessLayer.Models;
+using BusinessLayer.Repositories;
 using log4net;
+using log4net.Appender;
 using log4net.Config;
 using System.Reflection;
 
@@ -15,14 +18,19 @@ namespace ExceptionLogHW {
         static void Main(string[] args) {
             var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
             XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
+
             AddUsers(users.ToArray());
             MainMenu();
         }
 
+        /// <summary>
+        /// Menu chính của chương trình, cho phép người dùng lựa chọn và sử dụng các function login, thêm user, logout.
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
         private static void MainMenu() {
             string? user = null;
             List<string> options = new List<string> {
-                "Login", "Add new User", "Logout"
+                "Login", "Add new User", "Logout", "Log Location"
             };
             while (true) {
                 if (user != null) {
@@ -31,7 +39,7 @@ namespace ExceptionLogHW {
                     Console.WriteLine("Logged in as: " + user);
                     Console.ForegroundColor = color;
                 }
-                Menus.DisplayMenu("Demo Exceptions and Loggings", null, options, "Exit");
+                Menus.DisplayMenu("Demo Exceptions and Loggings", options, null, "Exit");
                 int get = Menus.GetOption(options.Count + 1);
                 Menus.ClearScreen();
                 switch (get) {
@@ -47,6 +55,9 @@ namespace ExceptionLogHW {
                         user = null;
                         break;
                     case 4:
+                        Console.WriteLine("Log Location: " + log.Logger.Repository.GetAppenders().OfType<RollingFileAppender>().FirstOrDefault().File);
+                        break;
+                    case 5:
                         Environment.Exit(0);
                         break;
                     default:
@@ -60,9 +71,18 @@ namespace ExceptionLogHW {
             }
         }
 
-        private static bool LoginMenu(out string user, int retryMax = 3) {
-            int retry = retryMax;
-            var users = UserManager.Instance;
+        /// <summary>
+        /// Menu nhập tên đăng nhập và mật khẩu
+        /// </summary>
+        /// <param name="user">Trả về username nếu đăng nhập thành công</param>
+        /// <param name="allowedRetries">Số lần thử lại tối đa. Default là 3</param>
+        /// <returns>Trả về username nếu đăng nhập thành công</returns>
+        /// <exception cref="AccountNotExistException"></exception>
+        /// <exception cref="PasswordNotMatchException"></exception>
+        private static bool LoginMenu(out string user, int allowedRetries = 3) {
+            if (allowedRetries < 1) allowedRetries = 1;
+            int retry = allowedRetries;
+            var users = UserRepository.Instance;
             string? username = null;
             string? password = null;
             while (true) {
@@ -83,7 +103,7 @@ namespace ExceptionLogHW {
 
                         username = get;
                         Menus.ClearScreen();
-                        retry = retryMax;
+                        retry = allowedRetries;
                         continue;
                     }
                     else Console.Write(username + "\n");
@@ -95,7 +115,7 @@ namespace ExceptionLogHW {
 
                         password = get;
                         Menus.ClearScreen();
-                        retry = retryMax;
+                        retry = allowedRetries;
                         continue;
                     }
                     else Console.Write(password + "\n");
@@ -121,8 +141,12 @@ namespace ExceptionLogHW {
             }
         }
 
+        /// <summary>
+        /// Menu cho phép người dùng nhập username và pasword để thêm account vào database
+        /// </summary>
+        /// <exception cref="AccountNotEnteredException"></exception>
         private static void AddUserMenu() {
-            var users = UserManager.Instance;
+            var users = UserRepository.Instance;
             string? username = null;
             string? password = null;
             while (true) {
@@ -182,14 +206,24 @@ namespace ExceptionLogHW {
             }
         }
 
+        /// <summary>
+        /// Add nhiều accounts cùng 1 lúc
+        /// </summary>
+        /// <param name="users"></param>
         private static void AddUsers(params Users[] users) {
             foreach (Users user in users) {
-                UserManager.Instance.AddUser(user);
+                UserRepository.Instance.AddUser(user);
             }
         }
 
+        /// <summary>
+        /// Lấy dữ liệu từ bàn phím
+        /// </summary>
+        /// <param name="isUsername"></param>
+        /// <returns>Username hoặc password đã nhập</returns>
+        /// <exception cref="AccountNotEnteredException">Không nhập dữ liệu</exception>
         private static string GetCredentials(bool isUsername) {
-            var users = UserManager.Instance;
+            var users = UserRepository.Instance;
             string? get = Console.ReadLine();
             if (get == null || get.Length == 0) {
                 if (isUsername) throw new AccountNotEnteredException(ErrorType.UsernameEmpty);

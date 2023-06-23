@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "qqjlo31x0Qnf1ZYu6Ttuf1OIacdumnpRTteVxhm9kpIBFWEyenHclSmg6iAfTeevNPOU2JTonDb4nn7TkUif+A==",
+  "dgSpecHash": "FyD1eXZDofcu0TChpxzdZCJoWkAwLy23MJSCEJf+ScSsAs7cxKJFPKZBOervYPN561W3uqgW5R6it/hpFtDRSw==",
   "success": true,
-  "projectFilePath": "D:\\FA\\NET\\ExceptionLogHW\\ExceptionLogHW\\ExceptionLogHW.csproj",
+  "projectFilePath": "D:\\FA\\NET\\ExceptionLogHW\\ExceptionLogHW\\PresentationLayer.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\iamap\\.nuget\\packages\\log4net\\2.0.15\\log4net.2.0.15.nupkg.sha512",
     "C:\\Users\\iamap\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\7.0.0\\microsoft.extensions.dependencyinjection.7.0.0.nupkg.sha512",

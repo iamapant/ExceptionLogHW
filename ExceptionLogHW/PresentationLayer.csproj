@@ -14,6 +14,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\BusinessLayer\BusinessLayer.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
         <Compile Update="AssemblyInfo.cs">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Compile>
@@ -21,12 +25,6 @@
 
     <ItemGroup>
       <None Update="log4net.config">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="User\Password.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="User\Username.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
